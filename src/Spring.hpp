@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Particle.hpp"
+#include "InteractableEntity.hpp"
 #include <SFML/Graphics.hpp>
 
-class Spring: public sf::Drawable
+class Spring: public InteractableEntity
 {
     private:
         sf::CircleShape m_Pivot;
@@ -17,9 +18,9 @@ class Spring: public sf::Drawable
         void ApplyForce(float x, float y);
         void ApplyAcceleration(const sf::Vector2f& acceleration);
         void ApplyAcceleration(float x, float y);
-        void Update(float deltaTime, sf::Window *window);
-        bool OnEvent(const sf::Event& event);
-        void OnImGuiRender();
+        virtual void Update(float deltaTime, sf::Window *window) override;
+        virtual bool OnEvent(const sf::Event& event) override;
+        virtual void OnImGuiRender() override;
     private:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
         bool SelectItem(const sf::Vector2f& clickPos);
