@@ -9,6 +9,7 @@ class Body: public sf::Drawable
         struct Connection
         {
             float k;            // spring coefficient
+            float length;
             unsigned int start; // connections
             unsigned int end;
         };
@@ -25,4 +26,5 @@ class Body: public sf::Drawable
         void ApplyAcceleration(float x, float y);
     private:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+        void ApplyInternalForces();
 };
