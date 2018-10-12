@@ -1,9 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <functional>
 #include "Joint.hpp"
+#include "InteractableEntity.hpp"
 
-class Body: public sf::Drawable
+class Body: public InteractableEntity
 {
     public:
         struct Connection
@@ -21,9 +23,10 @@ class Body: public sf::Drawable
         Body(const std::vector<Joint>& joints, const std::vector<Connection>& connections);
         void AddJoint(const Joint& joint);
         void AddConnection(const Connection& connection);
-        void Update(float deltaTime);
+        virtual void Update(float deltaTime, sf::Window *window) override;
         void ApplyAcceleration(const sf::Vector2f& acceleration);
         void ApplyAcceleration(float x, float y);
+        void ApplyPhysicsToJoints(const std::function<void(Joint&)>& func);
     private:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
         void ApplyInternalForces();

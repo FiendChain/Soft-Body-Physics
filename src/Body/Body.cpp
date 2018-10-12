@@ -2,6 +2,7 @@
 #include "Joint.hpp"
 #include <SFML/Graphics.hpp>
 #include <math.h>
+#include <functional>
 
 Body::Body()
     : m_Joints(0), m_Connections(0)
@@ -26,10 +27,18 @@ void Body::AddConnection(const Connection& connection)
     m_Connections.push_back(connection);
 }
 
-void Body::Update(float deltaTime)
+void Body::Update(float deltaTime, sf::Window *window)
 {
     ApplyInternalForces();
     for (auto& joint: m_Joints) joint.Update(deltaTime);
+}
+
+void Body::ApplyPhysicsToJoints(const std::function<void(Joint&)>& func)
+{
+    for (auto& joint: m_Joints)
+    {
+        func(joint);
+    }
 }
 
 void Body::ApplyInternalForces()
