@@ -5,7 +5,7 @@
 #include <random>
 #include <vector>
 
-#include "Spring.hpp"
+#include "Body/Body.hpp"
 
 class App
 {
@@ -15,8 +15,8 @@ class App
         sf::Clock m_Clock;
         std::mt19937 m_RngEngine;
         sf::Mutex m_Mutex;
-        Spring m_Spring;
         float m_Gravity;
+        Body m_Body;
     public:
         App(unsigned int width, unsigned int height, unsigned int fps);
         ~App();

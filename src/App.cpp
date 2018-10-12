@@ -13,7 +13,9 @@ App::App(unsigned int width, unsigned int height, unsigned int fps)
       m_Window(sf::VideoMode(width, height), "Soft Body Physics"),
       m_RngEngine(time(NULL)),
       m_Gravity(9.8f),
-      m_Spring(5, 10, sf::Vector2f(width/2, height/4), sf::Vector2f(width/3, height/2))
+      m_Body {
+
+      }
 {
     m_Window.setFramerateLimit(m_Fps);
     ImGui::SFML::Init(m_Window);
@@ -50,7 +52,7 @@ void App::PollEvents()
     while (m_Window.pollEvent(event))
     {
         ImGui::SFML::ProcessEvent(event);
-        m_Spring.OnEvent(event);
+        m_Body.OnEvent(event);
         if (event.type == sf::Event::Closed)
         {
             m_Window.close();
@@ -69,7 +71,7 @@ void App::Render()
 {
     // window
     m_Window.clear(sf::Color::White);
-    m_Window.draw(m_Spring);
+    m_Window.draw(m_Body);
     RenderImGui();
     ImGui::SFML::Render(m_Window);
     m_Window.display();
@@ -83,7 +85,7 @@ void App::RenderImGui()
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::SliderFloat("Gravity", &m_Gravity, -20, 20);
     ImGui::End();
-    m_Spring.OnImGuiRender();
+    m_Body.OnImGuiRender();
 }
 
 void App::Update()
@@ -98,8 +100,8 @@ void App::Update()
         {
             lastUpdate = m_Clock.getElapsedTime();
             m_Mutex.lock();
-            m_Spring.ApplyAcceleration(0, m_Gravity);
-            m_Spring.Update(deltaTime, &m_Window);
+            m_Body.ApplyAcceleration(0, m_Gravity);
+            m_Body.Update(deltaTime, &m_Window);
             m_Mutex.unlock();
         }
     }
