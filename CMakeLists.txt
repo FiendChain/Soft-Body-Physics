@@ -12,6 +12,8 @@ set(LIB_DIR ${CMAKE_SOURCE_DIR}/libs)
 set(SRC_FILES 
     ${SRC_FILES_DIR}/main.cpp
     ${SRC_FILES_DIR}/App.cpp
+    ${SRC_FILES_DIR}/AppInput.cpp
+    ${SRC_FILES_DIR}/AppLoader.cpp
     ${SRC_FILES_DIR}/InteractableEntity.cpp
     ${SRC_FILES_DIR}/Particle.cpp
     ${SRC_FILES_DIR}/Spring.cpp

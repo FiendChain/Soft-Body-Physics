@@ -1,9 +1,12 @@
 #include "App.hpp"
+#include "Body/Body.hpp"
+
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <random>
 #include <time.h>
 #include <functional>
+#include <string>
 
 #include <imgui/imgui.h>
 #include <imgui-sfml/imgui-SFML.h>
@@ -14,7 +17,17 @@ App::App(unsigned int width, unsigned int height, unsigned int fps)
       m_RngEngine(time(NULL)),
       m_Gravity(9.8f),
       m_Body {
-
+            { Joint(1, 10), Joint(1, 10), Joint(1, 10), Joint(1, 10), Joint(1, 10) },
+            { 
+                Body::Connection{10, 10, 0, 4},
+                Body::Connection{10, 10, 1, 4},
+                Body::Connection{10, 10, 2, 4},
+                Body::Connection{10, 10, 3, 4},
+                Body::Connection{10, 10, 0, 1},
+                Body::Connection{10, 10, 1, 2},
+                Body::Connection{10, 10, 2, 3},
+                Body::Connection{10, 10, 3, 0},
+            }
       }
 {
     m_Window.setFramerateLimit(m_Fps);
@@ -42,27 +55,6 @@ void App::Run()
             Render();
             PollEvents();
             m_Mutex.unlock();
-        }
-    }
-}
-
-void App::PollEvents()
-{
-    sf::Event event;
-    while (m_Window.pollEvent(event))
-    {
-        ImGui::SFML::ProcessEvent(event);
-        m_Body.OnEvent(event);
-        if (event.type == sf::Event::Closed)
-        {
-            m_Window.close();
-        }
-        else if (event.type == sf::Event::KeyPressed)
-        {
-            switch (event.key.code)
-            {
-
-            }
         }
     }
 }
