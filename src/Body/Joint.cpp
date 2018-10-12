@@ -1,14 +1,14 @@
 #include "Joint.hpp"
-#include "Particle.hpp"
+#include "Entities/DragableParticle.hpp"
 
 Joint::Joint()
-    : Particle(0, 0)
+    : DragableParticle(0, 0)
 {
     
 }
 
 Joint::Joint(float mass, float radius)
-    : Particle(mass, radius)
+    : DragableParticle(mass, radius)
 {
 
 }

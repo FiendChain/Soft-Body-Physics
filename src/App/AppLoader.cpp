@@ -9,14 +9,11 @@
 #include <SFML/Graphics.hpp>
 #include <imgui-sfml/imgui-SFML.h>
 
-static unsigned int DEFAULT_WIDTH = 640,
-                    DEFAULT_HEIGHT = 480,
-                    DEFAULT_FPS = 60;
-static float        DEFAULT_GRAVITY = 9.8f;
+#include "AppConfig.h"
 
 App::App(const std::string& levelPath)
     : m_Width(DEFAULT_WIDTH), m_Height(DEFAULT_HEIGHT), m_Fps(DEFAULT_FPS),
-      m_Window(sf::VideoMode(DEFAULT_WIDTH, DEFAULT_HEIGHT), "Soft Body Physics"),
+      m_Window(sf::VideoMode(DEFAULT_WIDTH, DEFAULT_HEIGHT), PROJECT_NAME), 
       m_RngEngine(time(NULL)),
       m_Gravity(DEFAULT_GRAVITY)
 {
@@ -61,10 +58,10 @@ void App::LoadLevelFromFile(const std::string& levelPath)
             else if ((pos = buffer.find("s ")) != std::string::npos)
             {
                 values << buffer.substr(pos+1);
-                float k, length;
+                float k, c, length;
                 unsigned int start, end;
-                values >> k >> length >> start >> end;
-                m_Body.AddConnection({k, length, start, end});
+                values >> k >> c >> length >> start >> end;
+                m_Body.AddConnection({k, c, length, start, end});
             }
             else
             {

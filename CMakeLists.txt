@@ -7,21 +7,30 @@ project("Soft Body Physics")
 
 set(SRC_FILES_DIR ${CMAKE_SOURCE_DIR}/src)
 set(LIB_DIR ${CMAKE_SOURCE_DIR}/libs)
-
+set(PROJECT_BINARY_DIR bin)
 
 set(SRC_FILES 
     ${SRC_FILES_DIR}/main.cpp
-    ${SRC_FILES_DIR}/App.cpp
-    ${SRC_FILES_DIR}/AppInput.cpp
-    ${SRC_FILES_DIR}/AppLoader.cpp
-    ${SRC_FILES_DIR}/InteractableEntity.cpp
-    ${SRC_FILES_DIR}/Particle.cpp
-    ${SRC_FILES_DIR}/Spring.cpp
+    ${SRC_FILES_DIR}/App/App.cpp
+    ${SRC_FILES_DIR}/App/AppInput.cpp
+    ${SRC_FILES_DIR}/App/AppLoader.cpp
+    ${SRC_FILES_DIR}/Entities/DragableEntity.cpp
+    ${SRC_FILES_DIR}/Entities/DragableParticle.cpp
+    ${SRC_FILES_DIR}/Entities/DragablePoint.cpp
+    ${SRC_FILES_DIR}/Entities/InteractableEntity.cpp
+    ${SRC_FILES_DIR}/Entities/Particle.cpp
+    ${SRC_FILES_DIR}/Spring/Spring.cpp
     ${SRC_FILES_DIR}/Body/Body.cpp
     ${SRC_FILES_DIR}/Body/Joint.cpp)
 
 include_directories(${SRC_FILES_DIR})
 include_directories(${LIB_DIR})
+
+configure_file (
+    ${SRC_FILES_DIR}/App/AppConfig.h.in
+    ${PROJECT_BINARY_DIR}/AppConfig.h
+)
+include_directories (build/${PROJECT_BINARY_DIR})
 
 # sfml libraries
 set(SFML_DIR ${LIB_DIR}/SFML-2.5.0)
@@ -61,3 +70,4 @@ target_compile_options(main PUBLIC -Werror=return-type)
 target_link_libraries(main imgui imgui-sfml ${SFML_LIBS})
 
 install(TARGETS main DESTINATION bin)
+install(FILES build/${PROJECT_BINARY_DIR}/AppConfig.h DESTINATION include)

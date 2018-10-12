@@ -1,5 +1,6 @@
 #include "App.hpp"
 #include "Body/Body.hpp"
+#include "AppConfig.h"
 
 #include <SFML/Graphics.hpp>
 #include <memory>
@@ -13,22 +14,9 @@
 
 App::App(unsigned int width, unsigned int height, unsigned int fps)
     : m_Width(width), m_Height(height), m_Fps(fps), 
-      m_Window(sf::VideoMode(width, height), "Soft Body Physics"),
+      m_Window(sf::VideoMode(width, height), PROJECT_NAME),
       m_RngEngine(time(NULL)),
-      m_Gravity(9.8f),
-      m_Body {
-            { Joint(1, 10), Joint(1, 10), Joint(1, 10), Joint(1, 10), Joint(1, 10) },
-            { 
-                Body::Connection{10, 10, 0, 4},
-                Body::Connection{10, 10, 1, 4},
-                Body::Connection{10, 10, 2, 4},
-                Body::Connection{10, 10, 3, 4},
-                Body::Connection{10, 10, 0, 1},
-                Body::Connection{10, 10, 1, 2},
-                Body::Connection{10, 10, 2, 3},
-                Body::Connection{10, 10, 3, 0},
-            }
-      }
+      m_Gravity(9.8f)
 {
     m_Window.setFramerateLimit(m_Fps);
     ImGui::SFML::Init(m_Window);
@@ -75,7 +63,7 @@ void App::RenderImGui()
     ImGui::SFML::Update(m_Window, imguiClock.restart());
     ImGui::Begin("Info");
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::SliderFloat("Gravity", &m_Gravity, -20, 20);
+    ImGui::SliderFloat("Gravity", &m_Gravity, -100, 100);
     ImGui::End();
     m_Body.OnImGuiRender();
 }
@@ -93,6 +81,32 @@ void App::Update()
             lastUpdate = m_Clock.getElapsedTime();
             m_Mutex.lock();
             m_Body.ApplyAcceleration(0, m_Gravity);
+            m_Body.ApplyPhysicsToJoints([this](Joint &joint) {
+                sf::Vector2f pos = joint.getPosition();
+                sf::Vector2f vel = joint.GetVelocity();
+                if (pos.x < 0) 
+                {
+                    pos.x = 0;
+                    vel.x = 0;
+                }
+                else if (pos.x > m_Width) 
+                {   
+                    pos.x = m_Width;
+                    vel.x = 0;
+                }
+                if (pos.y < 0)
+                {
+                    pos.y = 0;
+                    vel.y = 0;
+                }
+                else if (pos.y > m_Height)
+                {
+                    pos.y = m_Height;
+                    vel.y = 0;
+                }
+                joint.setPosition(pos);
+                joint.SetVelocity(vel);
+            });
             m_Body.Update(deltaTime, &m_Window);
             m_Mutex.unlock();
         }

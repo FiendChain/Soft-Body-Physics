@@ -3,7 +3,7 @@
 #include <vector>
 #include <functional>
 #include "Joint.hpp"
-#include "InteractableEntity.hpp"
+#include "Entities/InteractableEntity.hpp"
 
 class Body: public InteractableEntity
 {
@@ -11,6 +11,7 @@ class Body: public InteractableEntity
         struct Connection
         {
             float k;            // spring coefficient
+            float c;            // damping coefficient
             float length;
             unsigned int start; // connections
             unsigned int end;
@@ -24,6 +25,7 @@ class Body: public InteractableEntity
         void AddJoint(const Joint& joint);
         void AddConnection(const Connection& connection);
         virtual void Update(float deltaTime, sf::Window *window) override;
+        virtual bool OnEvent(const sf::Event& event) override;
         void ApplyAcceleration(const sf::Vector2f& acceleration);
         void ApplyAcceleration(float x, float y);
         void ApplyPhysicsToJoints(const std::function<void(Joint&)>& func);

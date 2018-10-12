@@ -30,7 +30,19 @@ void Body::AddConnection(const Connection& connection)
 void Body::Update(float deltaTime, sf::Window *window)
 {
     ApplyInternalForces();
-    for (auto& joint: m_Joints) joint.Update(deltaTime);
+    for (auto& joint: m_Joints) 
+    {
+        joint.Update(deltaTime, window);
+    }
+}
+
+bool Body::OnEvent(const sf::Event& event)
+{
+    for (auto& joint: m_Joints)
+    {
+        if (joint.OnEvent(event)) return true;
+    }
+    return false;
 }
 
 void Body::ApplyPhysicsToJoints(const std::function<void(Joint&)>& func)
@@ -48,8 +60,10 @@ void Body::ApplyInternalForces()
         auto& start = m_Joints.at(spring.start);
         auto& end = m_Joints.at(spring.end);   
         sf::Vector2f posDiff = start.getPosition() - end.getPosition();
+        sf::Vector2f velDiff = end.getPosition() - start.getPosition(); // relative velocity
         float distance = pow(posDiff.x*posDiff.x + posDiff.y*posDiff.y, 0.5f);
         sf::Vector2f force = -spring.k * (distance-spring.length) * posDiff;
+        force += -spring.c * velDiff;
         start.ApplyForce(force);
         end.ApplyForce(-force); 
     }

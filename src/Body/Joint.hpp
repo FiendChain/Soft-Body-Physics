@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Particle.hpp"
+#include "Entities/DragableParticle.hpp"
 
-class Joint: public Particle
+class Joint: public DragableParticle
 {
     public:
         Joint();
