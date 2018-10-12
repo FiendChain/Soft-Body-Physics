@@ -17,10 +17,9 @@ class App
         std::mt19937 m_RngEngine;
         sf::Mutex m_Mutex;
         float m_Gravity;
-        Body m_Body;
+        std::vector<std::shared_ptr<Body>> m_Bodies;
     public:
         App(const std::string& levelPath);
-        App(unsigned int width, unsigned int height, unsigned int fps);
         ~App();
         void Run();
     private:

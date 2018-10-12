@@ -24,7 +24,20 @@ void Body::AddJoint(const Joint& joint)
 
 void Body::AddConnection(const Connection& connection)
 {
-    m_Connections.push_back(connection);
+    if (connection.length < 0)
+    {
+        Joint& start = m_Joints.at(connection.start);
+        Joint& end = m_Joints.at(connection.end);
+        sf::Vector2f posDiff = start.getPosition()-end.getPosition();
+        float length = pow(posDiff.x*posDiff.x + posDiff.y*posDiff.y, 0.5f);
+        m_Connections.push_back({
+            connection.k, connection.c, length, connection.start, connection.end
+        });
+    }
+    else 
+    {
+        m_Connections.push_back(connection);
+    }
 }
 
 void Body::Update(float deltaTime, sf::Window *window)
@@ -62,6 +75,7 @@ void Body::ApplyInternalForces()
         sf::Vector2f posDiff = start.getPosition() - end.getPosition();
         sf::Vector2f velDiff = end.getPosition() - start.getPosition(); // relative velocity
         float distance = pow(posDiff.x*posDiff.x + posDiff.y*posDiff.y, 0.5f);
+        // f = -k(x-x0) -c*v
         sf::Vector2f force = -spring.k * (distance-spring.length) * posDiff;
         force += -spring.c * velDiff;
         start.ApplyForce(force);

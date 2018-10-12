@@ -8,7 +8,10 @@ void App::PollEvents()
     while (m_Window.pollEvent(event))
     {
         ImGui::SFML::ProcessEvent(event);
-        m_Body.OnEvent(event);
+        for (auto& body: m_Bodies)
+        {
+            body->OnEvent(event);
+        }
         if (event.type == sf::Event::Closed)
         {
             m_Window.close();

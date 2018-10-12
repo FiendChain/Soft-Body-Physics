@@ -2,10 +2,13 @@
 #include "Body/Body.hpp"
 #include "Body/Joint.hpp"
 
+#include <memory>
+
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <istream>
+
 #include <SFML/Graphics.hpp>
 #include <imgui-sfml/imgui-SFML.h>
 
@@ -15,7 +18,8 @@ App::App(const std::string& levelPath)
     : m_Width(DEFAULT_WIDTH), m_Height(DEFAULT_HEIGHT), m_Fps(DEFAULT_FPS),
       m_Window(sf::VideoMode(DEFAULT_WIDTH, DEFAULT_HEIGHT), PROJECT_NAME), 
       m_RngEngine(time(NULL)),
-      m_Gravity(DEFAULT_GRAVITY)
+      m_Gravity(DEFAULT_GRAVITY),
+      m_Bodies(0)
 {
     try {
         LoadLevelFromFile(levelPath);
@@ -41,6 +45,8 @@ void App::LoadLevelFromFile(const std::string& levelPath)
     bool resolutionChanged = false;
     bool parsingBody = false;
     unsigned int pos = 0;
+    std::shared_ptr<Body> body;
+
     while (getline(filestream, buffer))
     {   
         values.clear();
@@ -53,19 +59,20 @@ void App::LoadLevelFromFile(const std::string& levelPath)
                 values >> mass >> radius >> posX >> posY;
                 Joint joint(mass, radius);
                 joint.setPosition(posX, posY);
-                m_Body.AddJoint(joint);
+                body->AddJoint(joint);
             }
             else if ((pos = buffer.find("s ")) != std::string::npos)
             {
                 values << buffer.substr(pos+1);
-                float k, c, length;
+                float k, c;
                 unsigned int start, end;
-                values >> k >> c >> length >> start >> end;
-                m_Body.AddConnection({k, c, length, start, end});
+                values >> k >> c >> start >> end;
+                body->AddConnection({k, c, -1, start, end});
             }
             else
             {
                 parsingBody = false;
+                m_Bodies.push_back(body);
             }
         }
         else if ((pos = buffer.find("width")) != std::string::npos) 
@@ -94,6 +101,7 @@ void App::LoadLevelFromFile(const std::string& levelPath)
         else if (buffer.find("body:") != std::string::npos)
         {
             parsingBody = true;
+            body = std::make_shared<Body>();
         }
     }
     if (resolutionChanged)
