@@ -68,7 +68,7 @@ void App::Update()
     int updateTime = 1000.0f/(float)m_Fps; // implement tickrate later
     float deltaTime = 1.0f/(float)m_Fps;
     std::function<void(Joint&)> collideWall = [this](Joint &joint) {
-        sf::Vector2f pos = joint.getPosition();
+        sf::Vector2f pos = joint.GetPosition();
         sf::Vector2f vel = joint.GetVelocity();
         if (pos.x < 0) 
         {
@@ -90,7 +90,7 @@ void App::Update()
             pos.y = m_Height;
             vel.y = 0;
         }
-        joint.setPosition(pos);
+        joint.SetPosition(pos);
         joint.SetVelocity(vel);
     };
 

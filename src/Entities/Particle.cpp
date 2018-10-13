@@ -1,53 +1,43 @@
 #include "Particle.hpp" 
+#include "PhysicsEntity.hpp"
 #include <SFML/Graphics.hpp>
 
 Particle::Particle(float mass, float radius) 
-    : m_Mass(mass)
+    : PhysicsEntity(mass)
 {
-    setPosition(0, 0);
-    setRadius(radius);
-    setOrigin(radius, radius);
-    setFillColor(sf::Color::White);
-    setOutlineColor(sf::Color::Black);
-    setOutlineThickness(2.0f);
+    SetRadius(radius);
+    m_Shape.setFillColor(sf::Color::White);
+    m_Shape.setOutlineColor(sf::Color::Black);
+    m_Shape.setOutlineThickness(2.0f);
 }
 
-void Particle::Update(float deltaTime)
+const sf::Vector2f& Particle::GetPosition() const
 {
-    m_Velocity += m_Acceleration * deltaTime;
-    setPosition(getPosition() + m_Velocity * deltaTime);
-    m_Acceleration.x = m_Acceleration.y = 0;
+    return m_Shape.getPosition();
 }
 
-void Particle::ApplyForce(const sf::Vector2f& force)
+void Particle::SetPosition(float x, float y)
 {
-    m_Acceleration += force / m_Mass; // f = m*a, a = f/m
+    m_Shape.setPosition(x, y);
 }
 
-void Particle::ApplyForce(float x, float y)
+void Particle::SetPosition(const sf::Vector2f& position)
 {
-    m_Acceleration.x += x / m_Mass;
-    m_Acceleration.y += y / m_Mass;
+    m_Shape.setPosition(position);
 }
 
-void Particle::ApplyAcceleration(const sf::Vector2f& acceleration)
+float Particle::GetRadius() const
 {
-    m_Acceleration += acceleration;
+    return m_Shape.getRadius();
 }
 
-void Particle::ApplyAcceleration(float x, float y)
+void Particle::SetRadius(float radius)
 {
-    m_Acceleration.x += x;
-    m_Acceleration.y += y;
+    m_Shape.setRadius(radius);
+    m_Shape.setOrigin(radius, radius);
 }
 
-void Particle::SetVelocity(const sf::Vector2f& velocity)
+void Particle::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    m_Velocity = velocity;
-}
-
-void Particle::SetVelocity(float x, float y)
-{
-    m_Velocity.x = x;
-    m_Velocity.y = y;
+    target.draw(m_Shape, states);
 }

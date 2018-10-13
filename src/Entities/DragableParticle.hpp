@@ -4,7 +4,7 @@
 #include "DragableEntity.hpp"
 #include <SFML/Graphics.hpp>
 
-class DragableParticle: public Particle, public DragableEntity
+class DragableParticle: public DragableEntity, public Particle
 {
     private:
         sf::RectangleShape m_OutlineBox;
@@ -13,5 +13,5 @@ class DragableParticle: public Particle, public DragableEntity
         void Update(float deltaTime, sf::Window *window);
     private:
         virtual bool OnLClick(const sf::Vector2f& clickPos);
-        virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+        virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

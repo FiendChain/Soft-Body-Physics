@@ -10,17 +10,15 @@ set(LIB_DIR ${CMAKE_SOURCE_DIR}/libs)
 set(PROJECT_BINARY_DIR bin)
 
 set(SRC_FILES 
-    ${SRC_FILES_DIR}/main.cpp
-    ${SRC_FILES_DIR}/App/App.cpp
-    ${SRC_FILES_DIR}/App/AppInput.cpp
-    ${SRC_FILES_DIR}/App/AppLoader.cpp
     ${SRC_FILES_DIR}/Entities/DragableEntity.cpp
     ${SRC_FILES_DIR}/Entities/DragableParticle.cpp
     ${SRC_FILES_DIR}/Entities/DragablePoint.cpp
     ${SRC_FILES_DIR}/Entities/InteractableEntity.cpp
     ${SRC_FILES_DIR}/Entities/Particle.cpp
+    ${SRC_FILES_DIR}/Entities/PhysicsEntity.cpp
     ${SRC_FILES_DIR}/Spring/Spring.cpp
     ${SRC_FILES_DIR}/Body/Body.cpp
+    ${SRC_FILES_DIR}/Body/BodyLoader.cpp
     ${SRC_FILES_DIR}/Body/Joint.cpp)
 
 include_directories(${SRC_FILES_DIR})
@@ -63,11 +61,29 @@ add_library(imgui-sfml
 target_link_libraries(imgui-sfml imgui ${SFML_LIBS})
 install(TARGETS imgui-sfml DESTINATION bin)
 
-# main
-add_executable(main ${SRC_FILES})
-target_compile_definitions(main PUBLIC SFML_STATIC)
-target_compile_options(main PUBLIC -Werror=return-type)
-target_link_libraries(main imgui imgui-sfml ${SFML_LIBS})
+# base application
+add_library(soft_body ${SRC_FILES})
+target_compile_definitions(soft_body PUBLIC SFML_STATIC)
+target_compile_options(soft_body PUBLIC -Werror=return-type)
+target_link_libraries(soft_body imgui imgui-sfml ${SFML_LIBS})
 
-install(TARGETS main DESTINATION bin)
+# main
+add_executable(main 
+    ${SRC_FILES_DIR}/main.cpp
+    ${SRC_FILES_DIR}/App/App.cpp
+    ${SRC_FILES_DIR}/App/AppInput.cpp
+    ${SRC_FILES_DIR}/App/AppLoader.cpp)
+target_link_libraries(main soft_body)
+
+# body creator
+add_executable(body_creator 
+    ${SRC_FILES_DIR}/body_creator.cpp
+    ${SRC_FILES_DIR}/BodyCreator/BodyCreator.cpp
+    ${SRC_FILES_DIR}/BodyCreator/BodyCreatorEditing.cpp
+    ${SRC_FILES_DIR}/BodyCreator/BodyCreatorInput.cpp
+    ${SRC_FILES_DIR}/BodyCreator/BodyCreatorRender.cpp
+    ${SRC_FILES_DIR}/BodyCreator/DragableBodyNode.cpp)
+target_link_libraries(body_creator soft_body)
+
+install(TARGETS soft_body main body_creator DESTINATION bin)
 install(FILES build/${PROJECT_BINARY_DIR}/AppConfig.h DESTINATION include)

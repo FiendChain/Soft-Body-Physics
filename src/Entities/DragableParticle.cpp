@@ -22,19 +22,19 @@ void DragableParticle::Update(float deltaTime, sf::Window *window)
         sf::Vector2f mousePosFloat(mousePos.x, mousePos.y);
         m_OutlineBox.setPosition(mousePosFloat);
         // v = d/t
-        sf::Vector2f pos = (mousePosFloat - Particle::getPosition());
+        sf::Vector2f pos = (mousePosFloat - GetPosition());
         sf::Vector2f velocity = pos / deltaTime;
-        Particle::SetVelocity(velocity);
+        SetVelocity(velocity);
     }
 }
 
 bool DragableParticle::OnLClick(const sf::Vector2f& clickPos)
 {
-    sf::Vector2f posDiff = Particle::getPosition() - clickPos;
+    sf::Vector2f posDiff = GetPosition() - clickPos;
     float distanceSquared = posDiff.x*posDiff.x + posDiff.y*posDiff.y;
-    if (distanceSquared < Particle::getRadius()*Particle::getRadius())
+    float radius = GetRadius();
+    if (distanceSquared < radius*radius)
     {
-        float radius = Particle::getRadius();
         sf::Vector2f size = sf::Vector2f(radius, radius) * 1.1f;
         m_OutlineBox.setSize(size*2.0f);
         m_OutlineBox.setOrigin(size);
@@ -45,6 +45,7 @@ bool DragableParticle::OnLClick(const sf::Vector2f& clickPos)
 
 void DragableParticle::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    Particle::draw(target, states);
     if (DragableEntity::IsSelected())
         target.draw(m_OutlineBox, states); 
 }

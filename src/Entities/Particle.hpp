@@ -1,22 +1,19 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "PhysicsEntity.hpp"
 
-class Particle: public sf::CircleShape
+class Particle: public PhysicsEntity, public sf::Drawable
 {
     private:
-        float m_Mass;
-        sf::Vector2f m_Velocity;
-        sf::Vector2f m_Acceleration;
+        sf::CircleShape m_Shape;
     public:
         Particle(float mass, float radius);
-        void Update(float deltaTime);
-        void ApplyForce(const sf::Vector2f& force);
-        void ApplyForce(float x, float y);
-        void ApplyAcceleration(const sf::Vector2f& acceleration);
-        void ApplyAcceleration(float x, float y);
-        void SetVelocity(const sf::Vector2f& velocity);
-        void SetVelocity(float x, float y);
-        inline const sf::Vector2f& GetVelocity() const { return m_Velocity; }
-        inline const float GetMass() const { return m_Mass; }
+        virtual const sf::Vector2f& GetPosition() const override;
+        virtual void SetPosition(float x, float y) override;
+        virtual void SetPosition(const sf::Vector2f& position) override;
+        float GetRadius() const;
+        void SetRadius(float radius);
+    public:
+        virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };

@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <functional>
+#include <istream>
+#include <ostream>
 #include "Joint.hpp"
 #include "Entities/InteractableEntity.hpp"
 
@@ -32,4 +34,7 @@ class Body: public InteractableEntity
     private:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
         void ApplyInternalForces();
+    public:
+        friend std::istream& operator >>(std::istream& filestream, Body& body);
+        friend std::ostream& operator <<(std::ostream& filestream, Body& body);
 };

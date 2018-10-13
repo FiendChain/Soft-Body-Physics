@@ -28,7 +28,7 @@ void Body::AddConnection(const Connection& connection)
     {
         Joint& start = m_Joints.at(connection.start);
         Joint& end = m_Joints.at(connection.end);
-        sf::Vector2f posDiff = start.getPosition()-end.getPosition();
+        sf::Vector2f posDiff = start.GetPosition()-end.GetPosition();
         float length = pow(posDiff.x*posDiff.x + posDiff.y*posDiff.y, 0.5f);
         m_Connections.push_back({
             connection.k, connection.c, length, connection.start, connection.end
@@ -72,8 +72,8 @@ void Body::ApplyInternalForces()
     {
         auto& start = m_Joints.at(spring.start);
         auto& end = m_Joints.at(spring.end);   
-        sf::Vector2f posDiff = start.getPosition() - end.getPosition();
-        sf::Vector2f velDiff = end.getPosition() - start.getPosition(); // relative velocity
+        sf::Vector2f posDiff = start.GetPosition() - end.GetPosition();
+        sf::Vector2f velDiff = end.GetPosition() - start.GetPosition(); // relative velocity
         float distance = pow(posDiff.x*posDiff.x + posDiff.y*posDiff.y, 0.5f);
         // f = -k(x-x0) -c*v
         sf::Vector2f force = -spring.k * (distance-spring.length) * posDiff;
@@ -101,8 +101,8 @@ void Body::draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         auto& start = m_Joints.at(spring.start);
         auto& end = m_Joints.at(spring.end);
-        skeleton.append(sf::Vertex(start.getPosition(), sf::Color::Black));
-        skeleton.append(sf::Vertex(end.getPosition(), sf::Color::Black));
+        skeleton.append(sf::Vertex(start.GetPosition(), sf::Color::Black));
+        skeleton.append(sf::Vertex(end.GetPosition(), sf::Color::Black));
     }
     target.draw(skeleton, states);
 }

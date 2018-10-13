@@ -8,6 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <istream>
+#include <iostream>
 
 #include <SFML/Graphics.hpp>
 #include <imgui-sfml/imgui-SFML.h>
@@ -21,13 +22,7 @@ App::App(const std::string& levelPath)
       m_Gravity(DEFAULT_GRAVITY),
       m_Bodies(0)
 {
-    try {
-        LoadLevelFromFile(levelPath);
-    } catch(...) {
-        std::stringstream error;
-        error << "Couldn't load level file: " << levelPath;
-        throw std::runtime_error(error.str());
-    }
+    LoadLevelFromFile(levelPath);
     ImGui::SFML::Init(m_Window);
 }
 
@@ -36,47 +31,18 @@ void App::LoadLevelFromFile(const std::string& levelPath)
     std::ifstream filestream(levelPath);
     if (!filestream)
     {
-        std::stringstream error;
-        error << "Couldn't open level file: " << levelPath;
-        throw std::runtime_error(error.str());
+        std::cout << "Couldn't open level file: " << levelPath << std::endl;
+        return;
     }
     std::string buffer;
     std::stringstream values;
     bool resolutionChanged = false;
-    bool parsingBody = false;
     unsigned int pos = 0;
-    std::shared_ptr<Body> body;
 
     while (getline(filestream, buffer))
     {   
         values.clear();
-        if (parsingBody)
-        {
-            if ((pos = buffer.find("v ")) != std::string::npos)
-            {
-                values << buffer.substr(pos+1);
-                float mass, radius, posX, posY;
-                values >> mass >> radius >> posX >> posY;
-                Joint joint(mass, radius);
-                joint.setPosition(posX, posY);
-                body->AddJoint(joint);
-            }
-            else if ((pos = buffer.find("s ")) != std::string::npos)
-            {
-                values << buffer.substr(pos+1);
-                float k, c, length;
-                unsigned int start, end;
-                values >> k >> c >> length >> start >> end;
-                body->AddConnection({k, c, length, start, end});
-            }
-            else
-            {
-                parsingBody = false;
-                m_Bodies.push_back(body);
-                body = nullptr;
-            }
-        }
-        else if ((pos = buffer.find("width")) != std::string::npos) 
+        if ((pos = buffer.find("width")) != std::string::npos) 
         {   
             values << buffer.substr(pos+5);
             values >> m_Width;
@@ -99,14 +65,17 @@ void App::LoadLevelFromFile(const std::string& levelPath)
             values << buffer.substr(pos+7);
             values >> m_Gravity;
         }
-        else if (buffer.find("body:") != std::string::npos)
+        else if ((pos = buffer.find("body")) != std::string::npos)
         {
-            parsingBody = true;
-            body = std::make_shared<Body>();
+            std::string filename;
+            values << buffer.substr(pos+4);
+            values >> filename;
+            std::ifstream bodyFilestream(filename);
+            std::shared_ptr<Body> body = std::make_shared<Body>();
+            bodyFilestream >> *body;
+            m_Bodies.push_back(body);
         }
-    }
-    if (body)
-        m_Bodies.push_back(body);
+    } 
     if (resolutionChanged)
         m_Window.create(sf::VideoMode(m_Width, m_Height), "Soft Body Physics");
 }

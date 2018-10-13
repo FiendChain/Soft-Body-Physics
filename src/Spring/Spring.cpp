@@ -7,20 +7,14 @@ Spring::Spring(float k, float mass, const sf::Vector2f& pivot, const sf::Vector2
     : m_Pivot(3), m_Particle(mass, 10),
       m_K(k)
 {
-    // pivot
-    m_Pivot.setPosition(pivot);
-    m_Pivot.setOrigin(3, 3);
-    m_Pivot.setFillColor(sf::Color::Red);
-    m_Pivot.setOutlineColor(sf::Color::Black);
-    m_Pivot.setOutlineThickness(2.0f);
-
-    m_Particle.setPosition(point);
+    m_Pivot.SetPosition(pivot);
+    m_Particle.SetPosition(point);
 }
 
 void Spring::Update(float deltaTime, sf::Window *window)
 {
     // f = -k (x-x0)
-    sf::Vector2f force = -m_K * (m_Particle.getPosition() - m_Pivot.getPosition());
+    sf::Vector2f force = -m_K * (m_Particle.GetPosition() - m_Pivot.GetPosition());
     m_Particle.ApplyForce(force);
     m_Particle.Update(deltaTime, window);
     m_Pivot.Update(window);
@@ -46,8 +40,8 @@ void Spring::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(m_Pivot, states);
     // draw connection
     sf::VertexArray vertexes(sf::Lines);
-    vertexes.append(sf::Vertex(m_Pivot.getPosition(), sf::Color::Black));
-    vertexes.append(sf::Vertex(m_Particle.getPosition(), sf::Color::Black));
+    vertexes.append(sf::Vertex(m_Pivot.GetPosition(), sf::Color::Black));
+    vertexes.append(sf::Vertex(m_Particle.GetPosition(), sf::Color::Black));
     target.draw(vertexes, states);
 }
 

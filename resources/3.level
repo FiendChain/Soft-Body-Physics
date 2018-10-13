@@ -1,0 +1,7 @@
+width   1600
+height  900
+fps     60
+gravity 100
+// v mass radius pos.x pos.y
+// s k c length start end
+body resources/ball.body
