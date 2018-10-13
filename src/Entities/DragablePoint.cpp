@@ -5,7 +5,14 @@
 DragablePoint::DragablePoint(float radius)
     : sf::CircleShape(radius)
 {
-
+    // circle properties
+    setFillColor(sf::Color::Red);
+    setOutlineColor(sf::Color::Black);
+    setOutlineThickness(2.0f);
+    // box outline
+    m_OutlineBox.setFillColor(sf::Color::Transparent);
+    m_OutlineBox.setOutlineColor(sf::Color::Green);
+    m_OutlineBox.setOutlineThickness(1.0f);
 }
 
 void DragablePoint::Update(sf::Window *window) 

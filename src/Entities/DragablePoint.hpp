@@ -8,7 +8,7 @@ class DragablePoint: public sf::CircleShape, public DragableEntity
         sf::RectangleShape m_OutlineBox;
     public:
         DragablePoint(float radius);
-        void Update(sf::Window *window);
+        virtual void Update(sf::Window *window);
     private:
         virtual bool OnLClick(const sf::Vector2f& clickPos);
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
