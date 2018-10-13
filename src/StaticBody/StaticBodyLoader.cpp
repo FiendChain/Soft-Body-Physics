@@ -1,11 +1,11 @@
-#include <fstream>
-#include <sstream>
-#include <istream>
+#include "StaticBody.hpp"
 #include <iostream>
-#include "Body.hpp"
+#include <istream>
+#include <sstream>
+#include <ostream>
+#include <memory>
 
-// loading
-std::istream& operator >>(std::istream& in, Body& body)
+std::istream& operator >>(std::istream& in, StaticBody& body)
 {
     if (!in)
     {
@@ -25,9 +25,10 @@ std::istream& operator >>(std::istream& in, Body& body)
             values << buffer.substr(pos+1);
             float mass, radius, posX, posY;
             values >> mass >> radius >> posX >> posY;
-            Joint joint(mass, radius);
-            joint.SetPosition(posX, posY);
-            body.AddJoint(joint);
+            std::shared_ptr<StaticJoint> joint = std::make_shared<StaticJoint>(radius, mass);
+            joint->SetPosition(posX, posY);
+            body.m_Joints.push_back(joint);
+            
         }
         else if ((pos = buffer.find("s ")) != std::string::npos)
         {
@@ -35,28 +36,22 @@ std::istream& operator >>(std::istream& in, Body& body)
             float k, c, length;
             unsigned int start, end;
             values >> k >> c >> length >> start >> end;
-            body.AddConnection({k, c, length, start, end});
+            body.m_Connections.push_back({k, c, length, start, end});
         }
     }
-
     return in;
 }
 
-// saving
-std::ostream& operator <<(std::ostream& out, Body& body)  
+std::ostream& operator <<(std::ostream& out, StaticBody& body)
 {
     if (!out)
-    {
-        std::cerr << "Can't save body to file, doesn't exists" << std::endl;
         return out;
-    }
-
     for (auto& joint: body.m_Joints)
     {
-        sf::Vector2f position = joint.GetPosition();
+        sf::Vector2f position = joint->GetPosition();
         out << "    v "  << 
-            joint.GetMass()     << " " << 
-            joint.GetRadius()   << " " <<
+            joint->GetMass()     << " " << 
+            joint->GetRadius()   << " " <<
             position.x          << " " << 
             position.y          << "\n";
     }
@@ -67,7 +62,7 @@ std::ostream& operator <<(std::ostream& out, Body& body)
             connection.c        << " " <<
             connection.length   << " " <<
             connection.start    << " " << 
-            connection.end      << "\n";
+            connection.end      << " \n";
     }
     return out;
 }

@@ -14,9 +14,7 @@ StaticBody::StaticBody()
 void StaticBody::Update(float deltaTime, sf::Window *window)
 {
     for (auto& joint: m_Joints)
-    {
         joint->Update(window);
-    }
 }
 
 bool StaticBody::OnEvent(const sf::Event& event)
@@ -30,10 +28,14 @@ bool StaticBody::OnEvent(const sf::Event& event)
         if (event.mouseButton.button == sf::Mouse::Left)
         {
             sf::Vector2f position(event.mouseButton.x, event.mouseButton.y);
-            if (AddJoint(position)) {}
-            else if (RemoveJoint(position)) {}    // remove a body if lctrl is held
-            else if (m_CurrentParentNode < 0 && StartConnection(position)) {}   // start if lalt is held
-            else if (m_CurrentParentNode >= 0 && CreateConnection(position)) {} // on click if current node exists
+            if (AddJoint(position) || RemoveJoint(position)) 
+                return true;                
+            else if (m_CurrentParentNode < 0 && StartConnection(position)) 
+                return true;
+            else if (m_CurrentParentNode >= 0 && CreateConnection(position))
+                return true;
+            else
+                return false;
         }
     }
     else if (event.type == sf::Event::KeyReleased)
@@ -42,9 +44,10 @@ bool StaticBody::OnEvent(const sf::Event& event)
         {
         case sf::Keyboard::LAlt:
             m_CurrentParentNode = -1;
-            break;
+            return true;
         }
     }
+    return false;
 }
 
 void StaticBody::Reset()

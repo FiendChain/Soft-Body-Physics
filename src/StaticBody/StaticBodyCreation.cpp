@@ -45,7 +45,7 @@ bool StaticBody::AddJoint(const sf::Vector2f& position)
 {
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
         return false;
-    std::shared_ptr<StaticJoint> joint = std::make_shared<StaticJoint>(10);
+    std::shared_ptr<StaticJoint> joint = std::make_shared<StaticJoint>(10, 10);
     joint->SetPosition(position);
     m_Joints.push_back(joint);
     return true;

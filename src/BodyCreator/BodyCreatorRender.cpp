@@ -13,7 +13,10 @@ static sf::Vector2f GetMousePosFloat(sf::Window& window)
 void BodyCreator::Render()
 {
     m_Window.clear(sf::Color::White);
-    m_Window.draw(m_StaticBody);
+    if (!m_IsSimulating)
+        m_Window.draw(m_StaticBody);
+    else
+        m_Window.draw(m_Body);
     RenderImGui(); 
     ImGui::SFML::Render(m_Window);
     m_Window.display();
@@ -25,7 +28,10 @@ void BodyCreator::PollEvents()
     while (m_Window.pollEvent(event))
     {
         ImGui::SFML::ProcessEvent(event);
-        m_StaticBody.OnEvent(event);
+        if (!m_IsSimulating)
+            m_StaticBody.OnEvent(event);
+        else
+            m_Body.OnEvent(event);
         if (event.type == sf::Event::Closed)
         {
             m_Window.close();
@@ -36,7 +42,7 @@ void BodyCreator::PollEvents()
 void BodyCreator::RenderImGui()
 {
     static sf::Clock imguiClock;
-    static char buffer[100] = {0};
+    static char buffer[100] = "resources/";
     ImGui::SFML::Update(m_Window, imguiClock.restart());
     // basic info
     ImGui::Begin("Info");
@@ -44,12 +50,13 @@ void BodyCreator::RenderImGui()
     ImGui::End();
     // creator panel
     ImGui::Begin("Creator Panel");
-    m_Body.OnImGuiRender();
-    ImGui::InputText("Save location", buffer, 100);
+    ImGui::InputText("Location", buffer, 100);
     if (ImGui::Button("Save"))
-    {
         SaveBody(buffer);
-    }
+    if (ImGui::Button("Load"))
+        LoadBody(buffer);
+    if (ImGui::Button("Toggle Simulation"))
+        ToggleSimulation();
     ImGui::Separator();
     sf::Vector2u resolution(m_Width, m_Height);
     ImGui::SFML::SliderVec2u("Resolution", resolution, sf::Vector2u(0, 1920), sf::Vector2u(0, 1080));
@@ -58,5 +65,19 @@ void BodyCreator::RenderImGui()
         m_Width = resolution.x;
         m_Height = resolution.y;
         m_Window.create(sf::VideoMode(m_Width, m_Height), "Soft Body Creator");
+    }
+    ImGui::End();
+    // body panels
+    if (!m_IsSimulating)
+    {
+        ImGui::Begin("Static body");
+        m_StaticBody.OnImGuiRender();
+        ImGui::End();
+    }
+    else
+    {
+        ImGui::Begin("Active body");
+        m_Body.OnImGuiRender();
+        ImGui::End();
     }
 };

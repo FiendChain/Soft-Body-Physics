@@ -9,7 +9,7 @@ class StaticJoint: public DragablePoint
         float m_Mass;
         bool m_IsDragged;
     public:
-        StaticJoint(float radius);
+        StaticJoint(float radius, float mass);
         virtual void Update(sf::Window *window) override;
         bool OnEvent(const sf::Event& event);
         void OnImguiRender();

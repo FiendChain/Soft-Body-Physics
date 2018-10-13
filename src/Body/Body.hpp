@@ -35,6 +35,6 @@ class Body: public InteractableEntity
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
         void ApplyInternalForces();
     public:
-        friend std::istream& operator >>(std::istream& filestream, Body& body);
-        friend std::ostream& operator <<(std::ostream& filestream, Body& body);
+        friend std::istream& operator >>(std::istream& in, Body& body);
+        friend std::ostream& operator <<(std::ostream& out, Body& body);
 };

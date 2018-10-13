@@ -4,9 +4,9 @@
 
 #include <imgui/imgui.h>
 
-StaticJoint::StaticJoint(float radius)
+StaticJoint::StaticJoint(float radius, float mass)
     : DragablePoint(radius),
-      m_Mass(0)
+      m_Mass(mass)
 {
 
 }

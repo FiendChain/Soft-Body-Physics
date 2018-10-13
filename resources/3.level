@@ -4,4 +4,7 @@ fps     60
 gravity 100
 // v mass radius pos.x pos.y
 // s k c length start end
+body resources/stableBall.body
 body resources/ball.body
+
+

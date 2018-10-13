@@ -12,6 +12,7 @@
 
 BodyCreator::BodyCreator(unsigned int width, unsigned int height, unsigned int fps)
     : m_Width(width), m_Height(height), m_Fps(fps),
+      m_IsSimulating(false),
       m_Window(sf::VideoMode(width, height), "Body Creator")
 {
     m_Window.setFramerateLimit(fps);
@@ -56,11 +57,31 @@ void BodyCreator::Update()
     }
 }
 
+void BodyCreator::ToggleSimulation()
+{
+    if (!m_IsSimulating)
+    {
+        Body body;
+        m_StaticBody.CastToBody(m_Body);
+        m_Body = body; 
+        m_IsSimulating = true;
+    }
+    else
+    {
+        m_IsSimulating = false;
+    }
+}
+
+void BodyCreator::LoadBody(const std::string& filepath)
+{
+    std::ifstream filestream(filepath);
+    m_StaticBody.Reset();
+    filestream >> m_StaticBody;
+}
+
 void BodyCreator::SaveBody(const std::string& filepath)
 {
-    std::stringstream buffer;
-    buffer << "resources/" << filepath << ".body";
-    std::ofstream filestream(buffer.str());
+    std::ofstream filestream(filepath);
     filestream << m_StaticBody;
 }
 

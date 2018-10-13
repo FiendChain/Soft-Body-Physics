@@ -10,6 +10,9 @@ set(LIB_DIR ${CMAKE_SOURCE_DIR}/libs)
 set(PROJECT_BINARY_DIR bin)
 
 set(SRC_FILES 
+    ${SRC_FILES_DIR}/Body/Body.cpp
+    ${SRC_FILES_DIR}/Body/BodyLoader.cpp
+    ${SRC_FILES_DIR}/Body/Joint.cpp
     ${SRC_FILES_DIR}/Entities/DragableEntity.cpp
     ${SRC_FILES_DIR}/Entities/DragableParticle.cpp
     ${SRC_FILES_DIR}/Entities/DragablePoint.cpp
@@ -17,9 +20,12 @@ set(SRC_FILES
     ${SRC_FILES_DIR}/Entities/Particle.cpp
     ${SRC_FILES_DIR}/Entities/PhysicsEntity.cpp
     ${SRC_FILES_DIR}/Spring/Spring.cpp
-    ${SRC_FILES_DIR}/Body/Body.cpp
-    ${SRC_FILES_DIR}/Body/BodyLoader.cpp
-    ${SRC_FILES_DIR}/Body/Joint.cpp)
+    ${SRC_FILES_DIR}/StaticBody/StaticBody.cpp
+    ${SRC_FILES_DIR}/StaticBody/StaticBodyCasting.cpp
+    ${SRC_FILES_DIR}/StaticBody/StaticBodyCreation.cpp
+    ${SRC_FILES_DIR}/StaticBody/StaticBodyLoader.cpp
+    ${SRC_FILES_DIR}/StaticBody/StaticBodyRender.cpp
+    ${SRC_FILES_DIR}/StaticBody/StaticJoint.cpp)
 
 include_directories(${SRC_FILES_DIR})
 include_directories(${LIB_DIR})
@@ -79,10 +85,7 @@ target_link_libraries(main soft_body)
 add_executable(body_creator 
     ${SRC_FILES_DIR}/body_creator.cpp
     ${SRC_FILES_DIR}/BodyCreator/BodyCreator.cpp
-    ${SRC_FILES_DIR}/BodyCreator/BodyCreatorEditing.cpp
-    ${SRC_FILES_DIR}/BodyCreator/BodyCreatorInput.cpp
-    ${SRC_FILES_DIR}/BodyCreator/BodyCreatorRender.cpp
-    ${SRC_FILES_DIR}/BodyCreator/DragableBodyNode.cpp)
+    ${SRC_FILES_DIR}/BodyCreator/BodyCreatorRender.cpp)
 target_link_libraries(body_creator soft_body)
 
 install(TARGETS soft_body main body_creator DESTINATION bin)

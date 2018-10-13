@@ -21,8 +21,8 @@ class StaticBody: public InteractableEntity
         virtual bool OnEvent(const sf::Event& event) override;
         virtual void OnImGuiRender() override;
         virtual void Update(float deltaTime, sf::Window *window) override;
-    private:
         void Reset();
+    private:
         bool CreateConnection(const sf::Vector2f& position); // connections
         bool StartConnection(const sf::Vector2f& position);
         bool AddJoint(const sf::Vector2f& position);
@@ -31,4 +31,6 @@ class StaticBody: public InteractableEntity
     public:
         friend std::istream& operator >>(std::istream& in, StaticBody& body);
         friend std::ostream& operator <<(std::ostream& out, StaticBody& body);
+        void CastToBody(Body& body);
+        
 };
