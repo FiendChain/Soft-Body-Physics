@@ -64,15 +64,16 @@ void App::LoadLevelFromFile(const std::string& levelPath)
             else if ((pos = buffer.find("s ")) != std::string::npos)
             {
                 values << buffer.substr(pos+1);
-                float k, c;
+                float k, c, length;
                 unsigned int start, end;
-                values >> k >> c >> start >> end;
-                body->AddConnection({k, c, -1, start, end});
+                values >> k >> c >> length >> start >> end;
+                body->AddConnection({k, c, length, start, end});
             }
             else
             {
                 parsingBody = false;
                 m_Bodies.push_back(body);
+                body = nullptr;
             }
         }
         else if ((pos = buffer.find("width")) != std::string::npos) 
@@ -104,6 +105,8 @@ void App::LoadLevelFromFile(const std::string& levelPath)
             body = std::make_shared<Body>();
         }
     }
+    if (body)
+        m_Bodies.push_back(body);
     if (resolutionChanged)
         m_Window.create(sf::VideoMode(m_Width, m_Height), "Soft Body Physics");
 }
