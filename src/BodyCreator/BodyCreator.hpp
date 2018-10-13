@@ -12,6 +12,7 @@ class BodyCreator
 {
     private:
         sf::RenderWindow m_Window;
+        sf::View m_View;
         unsigned int m_Width, m_Height, m_Fps;
         sf::Clock m_Clock;
         sf::Mutex m_Mutex;

@@ -13,7 +13,8 @@
 BodyCreator::BodyCreator(unsigned int width, unsigned int height, unsigned int fps)
     : m_Width(width), m_Height(height), m_Fps(fps),
       m_IsSimulating(false), m_Gravity(9.8f),
-      m_Window(sf::VideoMode(width, height), "Body Creator")
+      m_Window(sf::VideoMode(width, height), "Body Creator"),
+      m_View(sf::Vector2f(width/2.0f, height/2.0f), sf::Vector2f(width, height))
 {
     m_Window.setFramerateLimit(fps);
     ImGui::SFML::Init(m_Window);

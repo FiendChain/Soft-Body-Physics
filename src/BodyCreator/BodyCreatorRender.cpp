@@ -22,23 +22,6 @@ void BodyCreator::Render()
     m_Window.display();
 }
 
-void BodyCreator::PollEvents()
-{
-    sf::Event event;
-    while (m_Window.pollEvent(event))
-    {
-        ImGui::SFML::ProcessEvent(event);
-        if (!m_IsSimulating)
-            m_StaticBody.OnEvent(event);
-        else
-            m_Body.OnEvent(event);
-        if (event.type == sf::Event::Closed)
-        {
-            m_Window.close();
-        }
-    }
-}
-
 void BodyCreator::RenderImGui()
 {
     static sf::Clock imguiClock;

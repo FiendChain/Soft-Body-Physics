@@ -85,6 +85,7 @@ target_link_libraries(main soft_body)
 add_executable(body_creator 
     ${SRC_FILES_DIR}/body_creator.cpp
     ${SRC_FILES_DIR}/BodyCreator/BodyCreator.cpp
+    ${SRC_FILES_DIR}/BodyCreator/BodyCreatorInput.cpp
     ${SRC_FILES_DIR}/BodyCreator/BodyCreatorRender.cpp)
 target_link_libraries(body_creator soft_body)
 
