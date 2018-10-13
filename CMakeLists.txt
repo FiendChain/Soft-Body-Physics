@@ -11,6 +11,7 @@ set(PROJECT_BINARY_DIR bin)
 
 set(SRC_FILES 
     ${SRC_FILES_DIR}/Body/Body.cpp
+    ${SRC_FILES_DIR}/Body/BodyCasting.cpp
     ${SRC_FILES_DIR}/Body/BodyLoader.cpp
     ${SRC_FILES_DIR}/Body/Joint.cpp
     ${SRC_FILES_DIR}/Entities/DragableEntity.cpp
@@ -21,7 +22,6 @@ set(SRC_FILES
     ${SRC_FILES_DIR}/Entities/PhysicsEntity.cpp
     ${SRC_FILES_DIR}/Spring/Spring.cpp
     ${SRC_FILES_DIR}/StaticBody/StaticBody.cpp
-    ${SRC_FILES_DIR}/StaticBody/StaticBodyCasting.cpp
     ${SRC_FILES_DIR}/StaticBody/StaticBodyCreation.cpp
     ${SRC_FILES_DIR}/StaticBody/StaticBodyLoader.cpp
     ${SRC_FILES_DIR}/StaticBody/StaticBodyRender.cpp

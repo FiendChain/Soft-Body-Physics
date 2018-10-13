@@ -6,6 +6,8 @@
 
 StaticBody::StaticBody()
     : m_Joints(0), m_Connections(0), 
+      m_JointRadius(10), m_JointMass(10),
+      m_K(30), m_C(1.2f),
       m_CurrentParentNode(-1)
 {
 

@@ -76,7 +76,8 @@ void BodyCreator::RenderImGui()
     }
     else
     {
-        ImGui::Begin("Active body");
+        ImGui::Begin("Simulation parameters");
+        ImGui::SliderFloat("Gravity", &m_Gravity, -100, 100);
         m_Body.OnImGuiRender();
         ImGui::End();
     }

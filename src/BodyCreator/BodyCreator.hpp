@@ -15,9 +15,10 @@ class BodyCreator
         unsigned int m_Width, m_Height, m_Fps;
         sf::Clock m_Clock;
         sf::Mutex m_Mutex;
-        Body m_Body; // simulation
+        Body m_Body; 
         StaticBody m_StaticBody;
-        bool m_IsSimulating;
+        bool m_IsSimulating; // simulation
+        float m_Gravity;
     public:
         BodyCreator(unsigned int width, unsigned int height, unsigned int fps);
         void Run();

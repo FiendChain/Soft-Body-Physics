@@ -1,4 +1,5 @@
 #include "StaticBody.hpp"
+#include "Entities/Connection.hpp"
 #include <SFML/Graphics.hpp>
 
 bool StaticBody::CreateConnection(const sf::Vector2f& position) // connection
@@ -11,7 +12,7 @@ bool StaticBody::CreateConnection(const sf::Vector2f& position) // connection
         auto& joint = m_Joints.at(i);
         if (i != m_CurrentParentNode && joint->CheckPositionInside(position))
         {
-            Body::Connection connection = {1,1,-1,m_CurrentParentNode,i};
+            Connection connection = {m_K,m_C,-1,m_CurrentParentNode,i};
             m_Connections.push_back(connection);
             m_CurrentParentNode = -1;
             return true;
@@ -45,7 +46,7 @@ bool StaticBody::AddJoint(const sf::Vector2f& position)
 {
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
         return false;
-    std::shared_ptr<StaticJoint> joint = std::make_shared<StaticJoint>(10, 10);
+    std::shared_ptr<StaticJoint> joint = std::make_shared<StaticJoint>(m_JointRadius, m_JointMass);
     joint->SetPosition(position);
     m_Joints.push_back(joint);
     return true;

@@ -6,18 +6,11 @@
 #include <ostream>
 #include "Joint.hpp"
 #include "Entities/InteractableEntity.hpp"
+#include "StaticBody/StaticBody.hpp"
+#include "Entities/Connection.hpp"
 
 class Body: public InteractableEntity
 {
-    public:
-        struct Connection
-        {
-            float k;            // spring coefficient
-            float c;            // damping coefficient
-            float length;
-            unsigned int start; // connections
-            unsigned int end;
-        };
     private:
         std::vector<Joint> m_Joints;
         std::vector<Connection> m_Connections;
@@ -31,6 +24,7 @@ class Body: public InteractableEntity
         void ApplyAcceleration(const sf::Vector2f& acceleration);
         void ApplyAcceleration(float x, float y);
         void ApplyPhysicsToJoints(const std::function<void(Joint&)>& func);
+        Body& operator =(StaticBody& body);
     private:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
         void ApplyInternalForces();

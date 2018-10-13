@@ -4,10 +4,12 @@
 
 void StaticBody::OnImGuiRender()
 {
+    ImGui::SliderFloat("Radius", &m_JointRadius, 0, 50);
+    ImGui::SliderFloat("Mass", &m_JointMass, 0, 50);
+    ImGui::SliderFloat("K", &m_K, 0, 50);
+    ImGui::SliderFloat("C", &m_C, 0, 10);
     if (ImGui::Button("Reset"))
-    {
         Reset();
-    }
     for (auto& joint: m_Joints)
     {
         if (joint->IsSelected())
