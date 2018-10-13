@@ -1,17 +1,17 @@
-#include "DragableBodyNode.hpp"
+#include "StaticJoint.hpp"
 #include <SFML/Graphics.hpp>
 #include "Entities/DragablePoint.hpp"
 
 #include <imgui/imgui.h>
 
-DragableBodyNode::DragableBodyNode(float radius)
+StaticJoint::StaticJoint(float radius)
     : DragablePoint(radius),
       m_Mass(0)
 {
 
 }
 
-bool DragableBodyNode::OnEvent(const sf::Event& event)
+bool StaticJoint::OnEvent(const sf::Event& event)
 {
     if (event.type == sf::Event::MouseButtonPressed)
     {
@@ -32,7 +32,7 @@ bool DragableBodyNode::OnEvent(const sf::Event& event)
     return false;
 }
 
-void DragableBodyNode::OnImguiRender()
+void StaticJoint::OnImguiRender()
 {
     float radius = DragablePoint::GetRadius();
     ImGui::Begin("Node editor");
@@ -45,7 +45,7 @@ void DragableBodyNode::OnImguiRender()
 
 }
 
-void DragableBodyNode::Update(sf::Window *window) 
+void StaticJoint::Update(sf::Window *window) 
 {
     if (m_IsDragged && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
     {
@@ -53,7 +53,7 @@ void DragableBodyNode::Update(sf::Window *window)
     }
 }
 
-bool DragableBodyNode::OnLClick(const sf::Vector2f& clickPos)
+bool StaticJoint::OnLClick(const sf::Vector2f& clickPos)
 {
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
     {
@@ -70,7 +70,7 @@ bool DragableBodyNode::OnLClick(const sf::Vector2f& clickPos)
     return false;
 }
 
-void DragableBodyNode::OnLRelease()
+void StaticJoint::OnLRelease()
 {
     m_IsDragged = false;
 }

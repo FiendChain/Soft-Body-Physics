@@ -3,13 +3,13 @@
 #include "Entities/DragablePoint.hpp"
 #include <SFML/Graphics.hpp>
 
-class DragableBodyNode: public DragablePoint
+class StaticJoint: public DragablePoint
 {
     private:
         float m_Mass;
         bool m_IsDragged;
     public:
-        DragableBodyNode(float radius);
+        StaticJoint(float radius);
         virtual void Update(sf::Window *window) override;
         bool OnEvent(const sf::Event& event);
         void OnImguiRender();

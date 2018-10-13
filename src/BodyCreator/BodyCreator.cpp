@@ -1,15 +1,17 @@
 #include "BodyCreator.hpp"
-#include "DragableBodyNode.hpp"
+#include "StaticBody/StaticBody.hpp"
 #include <SFML/Graphics.hpp>
 
 #include <functional>
 #include <iostream>
 
+#include <sstream>
+#include <fstream>
+
 #include <imgui-sfml/imgui-SFML.h>
 
 BodyCreator::BodyCreator(unsigned int width, unsigned int height, unsigned int fps)
     : m_Width(width), m_Height(height), m_Fps(fps),
-      m_Nodes(0), m_Connections(0), m_CurrentParentNode(-1),
       m_Window(sf::VideoMode(width, height), "Body Creator")
 {
     m_Window.setFramerateLimit(fps);
@@ -40,6 +42,7 @@ void BodyCreator::Update()
 {
     sf::Time lastUpdate = m_Clock.getElapsedTime();
     float updateTime = 1000.0f/(float)m_Fps;
+    float deltaTime = 1.0f/(float)m_Fps;
 
     while (m_Window.isOpen())
     {
@@ -47,13 +50,18 @@ void BodyCreator::Update()
         {
             lastUpdate = m_Clock.getElapsedTime();
             m_Mutex.lock();
-            for (auto& node: m_Nodes)
-            {
-                node->Update(&m_Window);
-            }
+            m_StaticBody.Update(deltaTime, &m_Window);
             m_Mutex.unlock();
         }
     }
+}
+
+void BodyCreator::SaveBody(const std::string& filepath)
+{
+    std::stringstream buffer;
+    buffer << "resources/" << filepath << ".body";
+    std::ofstream filestream(buffer.str());
+    filestream << m_StaticBody;
 }
 
 
