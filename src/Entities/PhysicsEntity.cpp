@@ -11,9 +11,17 @@ PhysicsEntity::PhysicsEntity(float mass)
 
 void PhysicsEntity::Update(float deltaTime)
 {
+    #ifdef P_VERLET_PHYSICS
+    sf::Vector2f oldPos = GetPosition();
+    sf::Vector2f posDelta = m_Velocity*deltaTime + m_Acceleration*(deltaTime*deltaTime);
+    SetPosition(oldPos+posDelta);
+    m_Velocity = posDelta / deltaTime;
+    m_Acceleration.x = m_Acceleration.y = 0;
+    #else
     m_Velocity += m_Acceleration * deltaTime;
     SetPosition(GetPosition() + m_Velocity * deltaTime);
     m_Acceleration.x = m_Acceleration.y = 0;
+    #endif
 }
 
 void PhysicsEntity::ApplyForce(const sf::Vector2f& force)

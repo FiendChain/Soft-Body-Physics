@@ -69,7 +69,7 @@ install(TARGETS imgui-sfml DESTINATION bin)
 
 # base application
 add_library(soft_body ${SRC_FILES})
-target_compile_definitions(soft_body PUBLIC SFML_STATIC)
+target_compile_definitions(soft_body PUBLIC SFML_STATIC P_VERLET_PHYSICS)
 target_compile_options(soft_body PUBLIC -Werror=return-type)
 target_link_libraries(soft_body imgui imgui-sfml ${SFML_LIBS})
 
