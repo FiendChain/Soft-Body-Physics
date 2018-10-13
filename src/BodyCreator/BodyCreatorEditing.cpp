@@ -109,7 +109,6 @@ void BodyCreator::SaveBody(const std::string& path)
         return;
     }
 
-    filestream << "body:\n";
     for (auto& node: m_Nodes)
     {
         sf::Vector2f position = node->GetPosition();
@@ -117,7 +116,7 @@ void BodyCreator::SaveBody(const std::string& path)
             node->GetMass()     << " " << 
             node->GetRadius()   << " " <<
             position.x          << " " << 
-            position.y          << " \n";
+            position.y          << "\n";
     }
     for (auto& connection: m_Connections)
     {

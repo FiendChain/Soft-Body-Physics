@@ -29,16 +29,24 @@ void DragablePoint::Update(sf::Window *window)
 
 bool DragablePoint::OnLClick(const sf::Vector2f& clickPos)
 {
-    sf::Vector2f posDiff = m_Shape.getPosition() - clickPos;
-    float distanceSquared = posDiff.x*posDiff.x + posDiff.y*posDiff.y;
-    float radius = m_Shape.getRadius();
-    if (distanceSquared < radius*radius)
+    if (CheckPositionInside(clickPos))
     {
+        float radius = m_Shape.getRadius();
         sf::Vector2f size = sf::Vector2f(radius, radius) * 1.1f;
         m_OutlineBox.setSize(size*2.0f);
         m_OutlineBox.setOrigin(size);
         return true;
     }
+    return false;
+}
+
+bool DragablePoint::CheckPositionInside(const sf::Vector2f& position) const
+{
+    sf::Vector2f posDiff = m_Shape.getPosition() - position;
+    float distanceSquared = posDiff.x*posDiff.x + posDiff.y*posDiff.y;
+    float radius = m_Shape.getRadius();
+    if (distanceSquared < radius*radius)
+        return true;
     return false;
 }
 
@@ -58,6 +66,8 @@ void DragablePoint::SetRadius(float radius)
 {
     m_Shape.setRadius(radius);
     m_Shape.setOrigin(radius, radius);
+    m_OutlineBox.setSize(sf::Vector2f(2*radius, 2*radius));
+    m_OutlineBox.setOrigin(radius, radius);
 }
 
 const sf::Vector2f& DragablePoint::GetPosition() const

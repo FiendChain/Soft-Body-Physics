@@ -8,7 +8,8 @@ class DragableEntity
     public:
         DragableEntity();
         virtual bool OnEvent(const sf::Event& event);
-        virtual bool IsSelected() const { return m_Selected; }
+        bool IsSelected() const { return m_Selected; }
+        void SetSelected(bool selected) { m_Selected = selected; }
     private:
         virtual bool OnLClick(const sf::Vector2f& clickPos) = 0;
         virtual void OnLRelease();

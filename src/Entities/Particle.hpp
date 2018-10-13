@@ -13,7 +13,7 @@ class Particle: public PhysicsEntity, public sf::Drawable
         virtual void SetPosition(float x, float y) override;
         virtual void SetPosition(const sf::Vector2f& position) override;
         float GetRadius() const;
-        void SetRadius(float radius);
+        virtual void SetRadius(float radius);
     public:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };

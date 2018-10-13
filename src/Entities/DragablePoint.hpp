@@ -15,7 +15,8 @@ class DragablePoint: public DragableEntity, public sf::Drawable
         const sf::Vector2f& GetPosition() const;
         void SetPosition(float x, float y);
         void SetPosition(const sf::Vector2f& position);
-    private:
+        bool CheckPositionInside(const sf::Vector2f& position) const;
         virtual bool OnLClick(const sf::Vector2f& clickPos);
+    private:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };

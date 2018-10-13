@@ -30,17 +30,33 @@ void DragableParticle::Update(float deltaTime, sf::Window *window)
 
 bool DragableParticle::OnLClick(const sf::Vector2f& clickPos)
 {
-    sf::Vector2f posDiff = GetPosition() - clickPos;
-    float distanceSquared = posDiff.x*posDiff.x + posDiff.y*posDiff.y;
-    float radius = GetRadius();
-    if (distanceSquared < radius*radius)
+ 
+    if (CheckPositionInside(clickPos))
     {
+        float radius = GetRadius();
         sf::Vector2f size = sf::Vector2f(radius, radius) * 1.1f;
         m_OutlineBox.setSize(size*2.0f);
         m_OutlineBox.setOrigin(size);
         return true;
     }
     return false;
+}
+
+bool DragableParticle::CheckPositionInside(const sf::Vector2f& position) const
+{
+    sf::Vector2f posDiff = GetPosition() - position;
+    float distanceSquared = posDiff.x*posDiff.x + posDiff.y*posDiff.y;
+    float radius = GetRadius();
+    if (distanceSquared < radius*radius)
+        return true;
+    return false;
+}
+
+void DragableParticle::SetRadius(float radius)
+{
+    Particle::SetRadius(radius);
+    m_OutlineBox.setSize(sf::Vector2f(2*radius, 2*radius));
+    m_OutlineBox.setOrigin(radius, radius);
 }
 
 void DragableParticle::draw(sf::RenderTarget& target, sf::RenderStates states) const
